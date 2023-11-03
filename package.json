@@ -1,0 +1,69 @@
+{
+  "name": "acme-web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "http://pattycare.briskbraintech.com/",
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.5",
+    "@mui/material": "^5.0.6",
+    "@reduxjs/toolkit": "1.6.2",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "axios": "^0.24.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "firebase": "4.8.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.18.0",
+    "react-redux": "7.2.6",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "4.0.3",
+    "typescript": "^4.1.2",
+    "uuid": "^8.3.2",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "set PORT=88&&react-app-rewired start",
+    "start:server:dev": "set APP_PORT=3001&&nodemon server/src/index.ts",
+    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
+    "server:dev": "npm run build:client&&set APP_PORT=4000&&npx ts-node -T ./server/src/index.ts",
+    "build:client": "react-app-rewired build",
+    "build:server": "tsc -p server",
+    "build:all": "npm run build:client&&npm run build:server",
+    "serve:dev": "set APP_PORT=3001&&node server/dist/src/index.js"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/react-router-dom": "^5.3.2",
+    "@types/uuid": "^8.3.1",
+    "nodemon": "^2.0.14",
+    "react-app-rewired": "^2.1.8"
+  }
+}

@@ -1,0 +1,78 @@
+options:
+  docker: true
+
+clone:
+  depth: 1
+
+image: public.ecr.aws/l9d9l4u2/pipeline-build-image:latest
+
+definitions:
+  steps:
+    - step: &download_binaries
+        name: Download binaries
+
+        services: [ "docker" ]
+        artifacts: [ "bin/**" ]
+        script:
+          - mkdir bin
+          - AWS_ACCESS_KEY_ID=$(echo $AWS_ACCESS_KEY_ID | base64 --decode) AWS_SECRET_ACCESS_KEY=$(echo $AWS_SECRET_ACCESS_KEY | base64 --decode) AWS_DEFAULT_REGION=us-east-1 aws s3 cp s3://dfx-pipelines/$BITBUCKET_REPO_SLUG/make.sh ./bin/make.sh && chmod +x ./bin/make.sh
+    - step: &build
+        name: Build Image
+
+        services: [ "docker" ]
+        artifacts: [ "images/**" ]
+        script:
+          - ./bin/make.sh build
+    - step: &push
+
+        services: [ "docker" ]
+        script:
+          - ./bin/make.sh push
+    - step: &deploy
+
+        services: [ "docker" ]
+        script:
+          - ./bin/make.sh deploy
+  services:
+    docker:
+      memory: 3072
+
+pipelines:
+  tags:
+    qa-*:
+      - step: *download_binaries
+      - step: *build
+      - step:
+          <<: *push
+          name: Push Image - NA East
+          deployment: Push Image - NA East
+      - step:
+          <<: *deploy
+          name: Deploy - NA East
+          deployment: QA - NA East
+    stg-*:
+      - step: *download_binaries
+      - step: *build
+      - step:
+          <<: *push
+          name: Push Image - NA East
+          deployment: Staging Push Image - NA East
+      - step:
+          <<: *deploy
+          name: Deploy - NA East
+          deployment: Staging - NA East
+    release-*:
+      - step: *download_binaries
+      - step:
+          <<: *deploy
+          name: Deploy - NA East
+          deployment: Prod - NA East
+  branches:
+    feature/OPS-572-release-pipeline:
+      - step:  
+          name: Tag yes
+          script:
+            - VERSION=$(git log -1 --pretty=%B | head -n1)
+            - git tag $VERSION
+            - git push origin --tags
+
