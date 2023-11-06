@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { FC } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import logo from '../assets/images/logo1.jpeg';
-import { Header, Profile, Results, SignIn } from '../Pages';
+import { Header, Profile, Demo, Results, SignIn } from '../Pages';
 import ProtectedRoute from '../ProtectedRoute';
 
 export const App: FC = () => {
@@ -53,6 +53,11 @@ export const App: FC = () => {
             <Route path="/profile">
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            </Route>
+            <Route path="/demo">
+              <ProtectedRoute>
+                <Demo />
               </ProtectedRoute>
             </Route>
           </Switch>
